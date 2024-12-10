@@ -1,20 +1,7 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-
-node_modules
+node_modules/
+.gitignore
 dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
+coverage
+.vscode
 .idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+.env
