@@ -5,4 +5,17 @@
 body {
   margin: 0;
   padding: 0;
+
+  --primary-color: #1b1b1b;
+  --secondary-color: #fff;
+  --danger-color: #ff0000;
+
+  --primary-background-color: #fff;
+  --secondary-background-color: #1b1b1b;
+  --danger-background-color: #690000;
+  
+  --disabled-text-color: #5c5c5c;
+  --disabled-button-color: #0000001f;
+  
+  --border-radius: 10px;
 }
