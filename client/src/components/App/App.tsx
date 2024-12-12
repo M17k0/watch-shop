@@ -1,11 +1,29 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { LoginPage } from '@/pages/Auth/LoginPage/LoginPage';
+import { RegisterPage } from '@/pages/Auth/RegisterPage/RegisterPage';
+import { LandingPage } from '@/pages/LandingPage/LandingPage';
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  Navigate,
+  Route,
+  RouterProvider,
+} from 'react-router-dom';
+import { MainLayout } from './MainLayout';
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/" />} />
+    </>,
+  ),
+);
 
 export function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="" element={<div>Watch Shop</div>} />
-      </Routes>
-    </BrowserRouter>
-  );
+  return <RouterProvider router={router} />;
 }
