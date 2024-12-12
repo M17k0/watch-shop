@@ -6,7 +6,6 @@ export function LandingPage() {
 
   return (
     <div>
-      <h1>Watch Shop</h1>
       <Button variant="primary" onClick={() => navigate('/login')}>
         Login
       </Button>

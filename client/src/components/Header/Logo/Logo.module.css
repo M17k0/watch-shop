@@ -1,0 +1,10 @@
+.logo {
+  display: flex;
+  font-weight: 700;
+  font-size: 24px;
+  margin-left: 10px;
+  margin-bottom: 10px;
+  line-height: 1.2;
+  text-decoration: none;
+  color: var(--primary-color);
+}
