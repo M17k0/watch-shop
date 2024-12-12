@@ -1,0 +1,29 @@
+.container {
+  position: relative;
+}
+
+.label {
+  position: absolute;
+  top: -8px;
+  left: 16px;
+  background-color: var(--primary-background-color);
+  color: var(--primary-color);
+  padding: 0 4px;
+  font-size: 12px;
+  user-select: none;
+}
+
+.input {
+  width: 100%;
+  padding: 20px;
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  width: 100%;
+}

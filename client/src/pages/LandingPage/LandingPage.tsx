@@ -1,12 +1,18 @@
-import { Button } from "../../components/Button/Button";
+import { useNavigate } from 'react-router-dom';
+import { Button } from '../../components/Button/Button';
 
 export function LandingPage() {
+  const navigate = useNavigate();
+
   return (
     <div>
       <h1>Watch Shop</h1>
-        <Button variant="primary">Button1</Button>
-        <Button variant="secondary"> Button2 </Button>
-        <Button variant="danger"> Button3 </Button>
+      <Button variant="primary" onClick={() => navigate('/login')}>
+        Login
+      </Button>
+      <Button variant="secondary" onClick={() => navigate('/register')}>
+        Register
+      </Button>
     </div>
   );
 }
