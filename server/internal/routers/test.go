@@ -8,6 +8,8 @@ import (
 func TestRouter() *http.ServeMux {
 	mux := http.NewServeMux()
 
+	fmt.Println("TestRouter")
+
 	mux.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "text/plain")
 		fmt.Fprintln(w, "This is a test GET endpoint!")
