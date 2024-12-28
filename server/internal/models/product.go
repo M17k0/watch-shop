@@ -2,7 +2,7 @@ package models
 
 type Product struct {
 	BaseModel
-	ImageUrl    string
+	ImageUrl    *string
 	Name        string  `gorm:"not null"`
 	Description string  `gorm:"not null"`
 	Price       float64 `gorm:"not null"`
