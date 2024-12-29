@@ -14,6 +14,7 @@ type Config struct {
 	DBHost     string
 	DBName     string
 	DBPort     string
+	ServerPort string
 }
 
 func LoadConfig() (*Config, error) {
@@ -27,8 +28,9 @@ func LoadConfig() (*Config, error) {
 	dbHost := os.Getenv("DB_HOST")
 	dbName := os.Getenv("DB_NAME")
 	dbPort := os.Getenv("DB_PORT")
+	serverPort := os.Getenv("SERVER_PORT")
 
-	if dbUser == "" || dbPassword == "" || dbHost == "" || dbName == "" || dbPort == "" {
+	if dbUser == "" || dbPassword == "" || dbHost == "" || dbName == "" || dbPort == "" || serverPort == "" {
 		return nil, fmt.Errorf("some required environment variables are missing")
 	}
 
@@ -38,5 +40,6 @@ func LoadConfig() (*Config, error) {
 		DBHost:     dbHost,
 		DBName:     dbName,
 		DBPort:     dbPort,
+		ServerPort: serverPort,
 	}, nil
 }

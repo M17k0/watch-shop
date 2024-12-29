@@ -38,8 +38,8 @@ func main() {
 	routes.RegisterCategoryRoutes(router, categoryController)
 	routes.RegisterTagRoutes(router, tagController)
 
-	fmt.Println("Server is running on http://localhost:8080")
-	if err := http.ListenAndServe(":8080", router); err != nil {
+	fmt.Printf("Server is listening on port %s\n", cfg.ServerPort)
+	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.ServerPort), router); err != nil {
 		fmt.Printf("Error starting server: %v\n", err)
 	}
 }
