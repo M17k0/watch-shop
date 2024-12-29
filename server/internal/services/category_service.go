@@ -50,3 +50,37 @@ func (s *CategoryService) AddCategory(name string, orderIndex int) (*models.Cate
 
 	return newCategory, nil
 }
+
+func (s *CategoryService) GetAllTagsForCategory(categoryId uint) ([]models.Tag, error) {
+	var tags []models.Tag
+	if err := s.db.Preload("Category").Where("category_id = ?", categoryId).Find(&tags).Error; err != nil {
+		return nil, err
+	}
+	return tags, nil
+}
+
+func (s *CategoryService) CreateTagForCategory(name string, categoryID uint) (*models.Tag, error) {
+	newTag := &models.Tag{
+		Name:       name,
+		CategoryID: categoryID,
+	}
+
+	if err := s.db.Create(newTag).Error; err != nil {
+		return nil, err
+	}
+
+	return newTag, nil
+}
+
+func (s *CategoryService) RemoveTagFromCategory(tagID uint) error {
+	tag := &models.Tag{}
+	if err := s.db.First(tag, tagID).Error; err != nil {
+		return err
+	}
+
+	if err := s.db.Delete(tag).Error; err != nil {
+		return err
+	}
+
+	return nil
+}

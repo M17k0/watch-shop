@@ -5,9 +5,12 @@ import (
 	"log"
 	"net/http"
 	"watch-shop-server/internal/config"
+	"watch-shop-server/internal/controllers"
 	"watch-shop-server/internal/migrations"
-	"watch-shop-server/internal/routers"
+	"watch-shop-server/internal/routes"
+	"watch-shop-server/internal/services"
 
+	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -26,12 +29,17 @@ func main() {
 	}
 	migrations.RunMigrations(db)
 
-	mainMux := http.NewServeMux()
-	mainMux.Handle("/test", routers.TestRouter())
-	mainMux.Handle("/test/", http.StripPrefix("/test", routers.TestRouter()))
+	productController := controllers.NewProductController(services.NewProductService(db))
+	categoryController := controllers.NewCategoryController(services.NewCategoryService(db))
+	tagController := controllers.NewTagController(services.NewTagService(db))
+
+	router := gin.Default()
+	routes.RegisterProductRoutes(router, productController)
+	routes.RegisterCategoryRoutes(router, categoryController)
+	routes.RegisterTagRoutes(router, tagController)
 
 	fmt.Println("Server is running on http://localhost:8080")
-	if err := http.ListenAndServe(":8080", mainMux); err != nil {
+	if err := http.ListenAndServe(":8080", router); err != nil {
 		fmt.Printf("Error starting server: %v\n", err)
 	}
 }
