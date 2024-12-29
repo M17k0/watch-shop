@@ -23,9 +23,10 @@ func (s *ProductService) GetProductByID(id uint) (*models.Product, error) {
 	return product, nil
 }
 
-func (s *ProductService) GetAllProducts() ([]models.Product, error) {
+func (s *ProductService) GetAllProductsPaginated(page, pageSize int) ([]models.Product, error) {
 	var products []models.Product
-	if err := s.db.Preload("ProductTags.Tag.Category").Find(&products).Error; err != nil {
+	offset := (page - 1) * pageSize
+	if err := s.db.Preload("ProductTags.Tag.Category").Limit(pageSize).Offset(offset).Find(&products).Error; err != nil {
 		return nil, err
 	}
 	return products, nil
@@ -102,4 +103,17 @@ func (s *ProductService) AddTagToProduct(tagId, productId int) error {
 	}
 
 	return nil
+}
+
+func (s *ProductService) GetAllCategoriesForProduct(productID uint) ([]models.Category, error) {
+	var categories []models.Category
+	if err := s.db.Raw(`
+		SELECT c.* FROM categories c
+		JOIN tags t ON c.id = t.category_id
+		JOIN product_tags pt ON t.id = pt.tag_id
+		WHERE pt.product_id = ?
+	`, productID).Scan(&categories).Error; err != nil {
+		return nil, err
+	}
+	return categories, nil
 }
