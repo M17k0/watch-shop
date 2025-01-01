@@ -4,12 +4,13 @@ import { LandingPage } from '@/pages/LandingPage/LandingPage';
 import {
   createBrowserRouter,
   createRoutesFromElements,
-  Navigate,
   Route,
   RouterProvider,
 } from 'react-router-dom';
 import { MainLayout } from './MainLayout';
 import { CatalogPage } from '@/pages/CatalogPage/CatalogPage';
+import { WatchPage } from '@/pages/WatchPage/WatchPage';
+import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,10 +19,11 @@ const router = createBrowserRouter(
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/catalog" element={<CatalogPage />} />
+        <Route path="/watches" element={<CatalogPage />} />
+        <Route path="/watches/:id" element={<WatchPage />} />
       </Route>
 
-      <Route path="*" element={<Navigate to="/" />} />
+      <Route path="*" element={<NotFoundPage />} />
     </>,
   ),
 );

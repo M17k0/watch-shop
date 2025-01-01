@@ -16,7 +16,7 @@ export function Header() {
           variant="primary"
           color="primary"
           className={classes.navButton}
-          onClick={() => navigate('/catalog')}
+          onClick={() => navigate('/watches')}
         >
           Watches
         </Button>

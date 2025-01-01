@@ -17,6 +17,7 @@
 .nav {
   display: flex;
   gap: 16px;
+  padding: 10px;
 }
 
 .navButton {

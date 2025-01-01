@@ -23,13 +23,23 @@ func (s *ProductService) GetProductByID(id uint) (*models.Product, error) {
 	return product, nil
 }
 
-func (s *ProductService) GetAllProductsPaginated(page, pageSize int) ([]models.Product, error) {
+func (s *ProductService) GetAllProductsPaginated(page, pageSize int) ([]models.Product, int64, error) {
 	var products []models.Product
-	offset := (page - 1) * pageSize
-	if err := s.db.Preload("ProductTags.Tag.Category").Limit(pageSize).Offset(offset).Find(&products).Error; err != nil {
-		return nil, err
+	var totalCount int64
+
+	if err := s.db.Model(&models.Product{}).Count(&totalCount).Error; err != nil {
+		return nil, 0, err
 	}
-	return products, nil
+
+	offset := (page - 1) * pageSize
+	if err := s.db.Preload("ProductTags.Tag.Category").
+		Limit(pageSize).
+		Offset(offset).
+		Find(&products).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return products, totalCount, nil
 }
 
 func (s *ProductService) AddProduct(input types.CreateProductInput) (*models.Product, error) {
