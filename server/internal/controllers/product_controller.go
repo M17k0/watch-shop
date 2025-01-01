@@ -46,13 +46,16 @@ func (pc *ProductController) GetAllProducts(ctx *gin.Context) {
 		return
 	}
 
-	products, err := pc.ProductService.GetAllProductsPaginated(page, pageSize)
+	products, totalCount, err := pc.ProductService.GetAllProductsPaginated(page, pageSize)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve products"})
 		return
 	}
 
-	ctx.JSON(http.StatusOK, products)
+	ctx.JSON(http.StatusOK, gin.H{
+		"watches": products,
+		"total":   totalCount,
+	})
 }
 
 func (pc *ProductController) GetProductByID(ctx *gin.Context) {

@@ -10,6 +10,7 @@ import (
 	"watch-shop-server/internal/routes"
 	"watch-shop-server/internal/services"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -34,6 +35,9 @@ func main() {
 	tagController := controllers.NewTagController(services.NewTagService(db))
 
 	router := gin.Default()
+
+	router.Use(cors.Default())
+
 	routes.RegisterProductRoutes(router, productController)
 	routes.RegisterCategoryRoutes(router, categoryController)
 	routes.RegisterTagRoutes(router, tagController)
