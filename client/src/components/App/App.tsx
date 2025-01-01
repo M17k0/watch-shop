@@ -9,6 +9,7 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import { MainLayout } from './MainLayout';
+import { CatalogPage } from '@/pages/CatalogPage/CatalogPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -17,6 +18,7 @@ const router = createBrowserRouter(
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/catalog" element={<CatalogPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/" />} />

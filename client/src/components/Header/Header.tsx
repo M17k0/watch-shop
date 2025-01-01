@@ -1,12 +1,42 @@
-import classes from './Header.module.css'
+import { Button } from '@/components/Button/Button';
+import classes from './Header.module.css';
 import { Logo } from './Logo/Logo';
+import { useNavigate } from 'react-router-dom';
 
 export function Header() {
+  const navigate = useNavigate();
+
   return (
     <header className={classes.header}>
-      <div>
+      <div className={classes.logo}>
         <Logo />
       </div>
+      <nav className={classes.nav}>
+        <Button
+          variant="primary"
+          color="primary"
+          className={classes.navButton}
+          onClick={() => navigate('/catalog')}
+        >
+          Watches
+        </Button>
+        <Button
+          variant="primary"
+          color="secondary"
+          className={classes.navButton}
+          onClick={() => navigate('/login')}
+        >
+          Login
+        </Button>
+        <Button
+          variant="primary"
+          color="secondary"
+          className={classes.navButton}
+          onClick={() => navigate('/register')}
+        >
+          Register
+        </Button>
+      </nav>
     </header>
   );
 }

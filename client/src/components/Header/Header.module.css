@@ -9,3 +9,16 @@
   background-color: var(--primary-background-color);
   padding: 15px 15px 0px 15px;
 }
+
+.logo {
+  flex-shrink: 0;
+}
+
+.nav {
+  display: flex;
+  gap: 16px;
+}
+
+.navButton {
+  text-transform: none;
+}
