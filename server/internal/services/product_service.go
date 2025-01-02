@@ -23,16 +23,21 @@ func (s *ProductService) GetProductByID(id uint) (*models.Product, error) {
 	return product, nil
 }
 
-func (s *ProductService) GetAllProductsPaginated(page, pageSize int) ([]models.Product, int64, error) {
+func (s *ProductService) GetAllProductsPaginated(page, pageSize int, searchQuery string) ([]models.Product, int64, error) {
 	var products []models.Product
 	var totalCount int64
 
-	if err := s.db.Model(&models.Product{}).Count(&totalCount).Error; err != nil {
+	query := s.db.Model(&models.Product{})
+	if searchQuery != "" {
+		query = query.Where("name ILIKE ? OR description ILIKE ?", "%"+searchQuery+"%", "%"+searchQuery+"%")
+	}
+
+	if err := query.Count(&totalCount).Error; err != nil {
 		return nil, 0, err
 	}
 
 	offset := (page - 1) * pageSize
-	if err := s.db.Preload("ProductTags.Tag.Category").
+	if err := query.Preload("ProductTags.Tag.Category").
 		Limit(pageSize).
 		Offset(offset).
 		Find(&products).Error; err != nil {

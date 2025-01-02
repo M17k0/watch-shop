@@ -7,10 +7,10 @@ interface LoadWatchesResponse {
 }
 
 class WatchService {
-  async loadWatches(searchTerm?: string, page = 1, pageSize = 10) {
+  async loadWatches(query?: string, page = 1, pageSize = 10) {
     const { result } = await httpService.get<LoadWatchesResponse>("/products", {
       query: {
-        page, pageSize, searchTerm,
+        page, pageSize, query,
       },
     });
 
