@@ -1,5 +1,5 @@
-import { Watch } from "@/models/watchCard";
-import { httpService } from "./httpService";
+import { Watch } from '@/models/watchCard';
+import { httpService } from './httpService';
 
 interface LoadWatchesResponse {
   watches: Watch[];
@@ -7,14 +7,23 @@ interface LoadWatchesResponse {
 }
 
 class WatchService {
-  async loadWatches(query?: string, page = 1, pageSize = 10) {
-    const { result } = await httpService.get<LoadWatchesResponse>("/products", {
+  async loadWatches(
+    query?: string,
+    page = 1,
+    pageSize = 10,
+    tags: number[] = [],
+  ) {
+    console.log(tags);
+    const { result } = await httpService.get<LoadWatchesResponse>('/products', {
       query: {
-        page, pageSize, query,
+        page,
+        pageSize,
+        query,
+        tags: tags.join('-'),
       },
     });
 
-    return result
+    return result;
   }
 
   async loadWatch(id: number) {

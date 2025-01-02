@@ -23,7 +23,7 @@ func (s *ProductService) GetProductByID(id uint) (*models.Product, error) {
 	return product, nil
 }
 
-func (s *ProductService) GetAllProductsPaginated(page, pageSize int, searchQuery string) ([]models.Product, int64, error) {
+func (s *ProductService) GetAllProductsPaginated(page, pageSize int, searchQuery string, tags []int) ([]models.Product, int64, error) {
 	var products []models.Product
 	var totalCount int64
 
@@ -32,7 +32,14 @@ func (s *ProductService) GetAllProductsPaginated(page, pageSize int, searchQuery
 		query = query.Where("name ILIKE ? OR description ILIKE ?", "%"+searchQuery+"%", "%"+searchQuery+"%")
 	}
 
-	if err := query.Count(&totalCount).Error; err != nil {
+	if len(tags) > 0 {
+		query = query.Joins("JOIN product_tags ON product_tags.product_id = products.id").
+			Where("product_tags.tag_id IN (?)", tags).
+			Group("products.id").Having("COUNT(DISTINCT product_tags.tag_id) = ?", len(tags))
+	}
+
+	countQuery := query
+	if err := countQuery.Count(&totalCount).Error; err != nil {
 		return nil, 0, err
 	}
 

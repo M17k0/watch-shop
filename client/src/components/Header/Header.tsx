@@ -20,22 +20,6 @@ export function Header() {
         >
           Watches
         </Button>
-        <Button
-          variant="primary"
-          color="secondary"
-          className={classes.navButton}
-          onClick={() => navigate('/login')}
-        >
-          Login
-        </Button>
-        <Button
-          variant="primary"
-          color="secondary"
-          className={classes.navButton}
-          onClick={() => navigate('/register')}
-        >
-          Register
-        </Button>
       </nav>
     </header>
   );

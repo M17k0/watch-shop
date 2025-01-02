@@ -5,7 +5,14 @@ import { useAsync } from '@/hooks/useAsync';
 import { useSearchParams } from 'react-router-dom';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useThrottled } from '@/hooks/useThrottled';
-import { TextField, Box, Typography, Container, CircularProgress } from '@mui/material';
+import {
+  TextField,
+  Box,
+  Typography,
+  Container,
+  CircularProgress,
+} from '@mui/material';
+import { TagFilter } from '@/components/TagFilter/TagFilter';
 
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -47,9 +54,21 @@ export function CatalogPage() {
     }
   }, [searchParams]);
 
+  const [selectedTags, setSelectedTags] = useState<number[]>([]);
+
+  const handleFilterApply = (tags: number[]) => {
+    setSelectedTags(tags);
+  };
+
   const { data, loading, error } = useAsync(
-    () => watchService.loadWatches(searchQuery, currentPage, pageSize),
-    [searchParams, currentPage]
+    () =>
+      watchService.loadWatches(
+        searchQuery,
+        currentPage,
+        pageSize,
+        selectedTags,
+      ),
+    [searchParams, currentPage, selectedTags],
   );
 
   return (
@@ -77,7 +96,14 @@ export function CatalogPage() {
       </Box>
 
       {loading && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 5 }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            mt: 5,
+          }}
+        >
           <CircularProgress />
         </Box>
       )}
@@ -87,9 +113,11 @@ export function CatalogPage() {
         </Typography>
       )}
 
+      <TagFilter onFilterApply={handleFilterApply} />
+
       {data && (
         <>
-          <WatchGrid watches={data.watches} />
+          <WatchGrid watches={data.watches ?? []} />
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
             <Pagination
               currentPage={currentPage}

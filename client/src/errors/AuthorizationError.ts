@@ -1,3 +1,3 @@
-import { HTTPError } from "./HTTPError";
+import { HTTPError } from './HTTPError';
 
 export class AuthorizationError extends HTTPError {}

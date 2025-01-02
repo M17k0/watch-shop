@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"strings"
 	"watch-shop-server/internal/mappers"
 	"watch-shop-server/internal/services"
 	"watch-shop-server/internal/types"
@@ -49,7 +50,19 @@ func (pc *ProductController) GetAllProducts(ctx *gin.Context) {
 
 	searchQuery := ctx.Query("query")
 
-	products, totalCount, err := pc.ProductService.GetAllProductsPaginated(page, pageSize, searchQuery)
+	tagsParam := ctx.Query("tags")
+	var tags []int
+	if tagsParam != "" {
+		tagsStrings := strings.Split(tagsParam, "-")
+		for _, tagString := range tagsStrings {
+			tagID, err := strconv.Atoi(tagString)
+			if err == nil {
+				tags = append(tags, tagID)
+			}
+		}
+	}
+
+	products, totalCount, err := pc.ProductService.GetAllProductsPaginated(page, pageSize, searchQuery, tags)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve products"})
 		return

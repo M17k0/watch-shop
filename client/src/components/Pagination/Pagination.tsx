@@ -7,19 +7,23 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-export function Pagination({ currentPage, totalPages, onPageChange }: PaginationProps) {
+export function Pagination({
+  currentPage,
+  totalPages,
+  onPageChange,
+}: PaginationProps) {
   return (
     <MuiPagination
       count={totalPages}
       page={currentPage}
       onChange={(_, page) => onPageChange(page)}
       color="primary"
-      renderItem={(item) => (
+      renderItem={item => (
         <PaginationItem
           {...item}
           component={Link}
           to={`?page=${item.page}`}
-          onClick={(e) => {
+          onClick={e => {
             e.preventDefault();
             onPageChange(item.page ?? 1);
           }}

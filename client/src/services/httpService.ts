@@ -36,7 +36,11 @@ class HttpService {
     return this.request<T>(url, 'DELETE', options);
   }
 
-  private async request<T>(path: string, method: Method, { body, headers, query }: RequestOptions = {}) {
+  private async request<T>(
+    path: string,
+    method: Method,
+    { body, headers, query }: RequestOptions = {},
+  ) {
     const baseUrl = config.baseUrl.replace(/\/$/, '');
     const requestPath = path.replace(/^\//, '');
     const queryString = new URLSearchParams(query).toString();
@@ -85,7 +89,7 @@ class HttpService {
       throw new ServerError();
     }
 
-    const result = await response.json() as T;
+    const result = (await response.json()) as T;
     return { result, headers: response.headers };
   }
 }

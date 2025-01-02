@@ -6,7 +6,7 @@ export interface Watch {
   stock: number;
   type: string;
   imageUrl: string;
-  productTags: ProductTag[]
+  productTags: ProductTag[];
 }
 
 export interface ProductTag {
@@ -18,14 +18,14 @@ export interface ProductTag {
   categoryName: string;
 }
 
-// export interface Tag {
-//   ID: number;
-//   Name: string;
-//   CategoryID: number;
-// }
+export interface Tag {
+  id: number;
+  name: string;
+  categoryId: number;
+  categoryName: string;
+}
 
-// export interface Category {
-//   ID: number;
-//   Name: string;
-//   Tags?: Tag[];
-// }
+export interface Category {
+  id: number;
+  name: string;
+}
