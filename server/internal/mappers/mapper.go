@@ -22,6 +22,18 @@ type ProductTagDTO struct {
 	CategoryName string `json:"categoryName"`
 }
 
+type TagDTO struct {
+	ID           uint   `json:"id"`
+	Name         string `json:"name"`
+	CategoryID   uint   `json:"categoryId"`
+	CategoryName string `json:"categoryName"`
+}
+
+type CategoryDTO struct {
+	ID   uint   `json:"id"`
+	Name string `json:"name"`
+}
+
 func MapToProductDTO(product models.Product) ProductDTO {
 	var productTags []ProductTagDTO
 	for _, pt := range product.ProductTags {
@@ -46,5 +58,21 @@ func MapToProductDTO(product models.Product) ProductDTO {
 		Stock:       product.Stock,
 		Type:        product.Type,
 		ProductTags: productTags,
+	}
+}
+
+func MapToTagDTO(tag models.Tag) TagDTO {
+	return TagDTO{
+		ID:           tag.ID,
+		Name:         tag.Name,
+		CategoryID:   tag.Category.ID,
+		CategoryName: tag.Category.Name,
+	}
+}
+
+func MapToCategoryDTO(category models.Category) CategoryDTO {
+	return CategoryDTO{
+		ID:   category.ID,
+		Name: category.Name,
 	}
 }

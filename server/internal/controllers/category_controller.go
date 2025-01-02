@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"net/http"
+	"watch-shop-server/internal/mappers"
 	"watch-shop-server/internal/models"
 	"watch-shop-server/internal/services"
 
@@ -29,7 +30,7 @@ func (cc *CategoryController) CreateCategory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, category)
+	ctx.JSON(http.StatusCreated, mappers.MapToCategoryDTO(*category))
 }
 
 func (cc *CategoryController) GetAllCategories(ctx *gin.Context) {
@@ -39,7 +40,12 @@ func (cc *CategoryController) GetAllCategories(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, categories)
+	var categoryDTOs []mappers.CategoryDTO
+	for _, category := range categories {
+		categoryDTOs = append(categoryDTOs, mappers.MapToCategoryDTO(category))
+	}
+
+	ctx.JSON(http.StatusOK, categoryDTOs)
 }
 
 func (cc *CategoryController) GetCategoryByID(ctx *gin.Context) {
@@ -57,7 +63,7 @@ func (cc *CategoryController) GetCategoryByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, category)
+	ctx.JSON(http.StatusOK, mappers.MapToCategoryDTO(*category))
 }
 
 func (cc *CategoryController) GetCategoryByName(ctx *gin.Context) {
@@ -75,7 +81,7 @@ func (cc *CategoryController) GetCategoryByName(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, category)
+	ctx.JSON(http.StatusOK, mappers.MapToCategoryDTO(*category))
 }
 
 func (cc *CategoryController) AddTagToCategory(ctx *gin.Context) {
@@ -101,7 +107,7 @@ func (cc *CategoryController) AddTagToCategory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, tag)
+	ctx.JSON(http.StatusCreated, mappers.MapToTagDTO(*tag))
 }
 
 func (cc *CategoryController) RemoveTagFromCategory(ctx *gin.Context) {
@@ -137,5 +143,10 @@ func (cc *CategoryController) GetTagsForCategory(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, tags)
+	var tagDTOs []mappers.TagDTO
+	for _, tag := range tags {
+		tagDTOs = append(tagDTOs, mappers.MapToTagDTO(tag))
+	}
+
+	ctx.JSON(http.StatusOK, tagDTOs)
 }
