@@ -121,7 +121,7 @@ export function TagFilter({ onFilterApply }: TagFilterProps) {
             categories.map(category => (
               <Box key={category.id} sx={{ mb: 3 }}>
                 <Typography variant="h6" gutterBottom>
-                  {category.name}
+                  {category.name[0].toUpperCase() + category.name.slice(1)}
                 </Typography>
                 <FormControl component="fieldset">
                   {tags[category.id]?.map(tag => (
@@ -133,7 +133,7 @@ export function TagFilter({ onFilterApply }: TagFilterProps) {
                           onChange={() => toggleTagSelection(tag.id)}
                         />
                       }
-                      label={tag.name}
+                      label={tag.name[0].toUpperCase() + tag.name.slice(1)}
                     />
                   ))}
                 </FormControl>

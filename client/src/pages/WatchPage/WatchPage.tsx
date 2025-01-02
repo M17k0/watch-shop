@@ -119,7 +119,7 @@ export function WatchPage() {
             {watch.productTags.map(tag => (
               <Chip
                 key={tag.id}
-                label={tag.tagName}
+                label={tag.tagName[0].toUpperCase() + tag.tagName.slice(1)}
                 color="primary"
                 variant="outlined"
               />
