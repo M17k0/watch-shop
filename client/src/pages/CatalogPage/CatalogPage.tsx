@@ -1,16 +1,17 @@
 import { WatchGrid } from '@/components/WatchGrid/WatchGrid';
-import classes from './CatalogPage.module.css';
+import { Pagination } from '@/components/Pagination/Pagination';
 import { watchService } from '@/services/watchService';
 import { useAsync } from '@/hooks/useAsync';
 import { useSearchParams } from 'react-router-dom';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useThrottled } from '@/hooks/useThrottled';
+import { TextField, Box, Typography, Container, CircularProgress } from '@mui/material';
 
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
   const pageSize = 10;
-  
+
   const searchQuery = searchParams.get('query') ?? '';
   const pageParam = parseInt(searchParams.get('page') ?? '1', 10);
 
@@ -32,10 +33,9 @@ export function CatalogPage() {
     setSearchQuery(event.target.value);
   };
 
-  const handlePageChange = (direction: 'next' | 'previous') => {
-    const nextPage = direction === 'next' ? currentPage + 1 : Math.max(currentPage - 1, 1);
-    setCurrentPage(nextPage);
-    searchParams.set('page', nextPage.toString());
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    searchParams.set('page', page.toString());
     setSearchParams(searchParams);
     window.scrollTo(0, 0);
   };
@@ -47,34 +47,58 @@ export function CatalogPage() {
     }
   }, [searchParams]);
 
-  const { data, loading, error } = useAsync(() => watchService.loadWatches(searchQuery, currentPage, pageSize), [searchParams, currentPage]);
+  const { data, loading, error } = useAsync(
+    () => watchService.loadWatches(searchQuery, currentPage, pageSize),
+    [searchParams, currentPage]
+  );
 
   return (
-    <div className={classes.wrapper}>
-      <div className={classes.container}>
-        <h1>Watches</h1>
-        <input
-      type='search'
-      placeholder='Search by name of watch...'
-      value={searchTerm}
-      onChange={onSearchChange} />
-        {loading && <h3>Loading...</h3>}
-        {error ? <>Oops something went wrong</> : null}
-        <WatchGrid watches={data?.watches ?? []} />
-        <div className={classes.pagination}>
-        {currentPage > 1 && (
-          <button onClick={() => handlePageChange('previous')} disabled={currentPage === 1}>
-            <>nazad</>
-          </button>
-        )}
-        <span>Page {currentPage}</span>
-        {currentPage < (data ? Math.ceil(data.total / pageSize) : 0) && (
-          <button onClick={() => handlePageChange('next')}>
-            <>napred</>
-          </button>
-        )}
-      </div>
-      </div>
-    </div>
+    <Container maxWidth="lg" sx={{ mt: 4 }}>
+      <Box sx={{ mb: 4, textAlign: 'center' }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Watches
+        </Typography>
+      </Box>
+      <Box sx={{ mb: 3 }}>
+        <TextField
+          fullWidth
+          type="search"
+          variant="outlined"
+          placeholder="Search by name of watch..."
+          value={searchTerm}
+          onChange={onSearchChange}
+          size="small"
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2,
+            },
+          }}
+        />
+      </Box>
+
+      {loading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mt: 5 }}>
+          <CircularProgress />
+        </Box>
+      )}
+      {error != undefined && (
+        <Typography color="error" textAlign="center" sx={{ mt: 3 }}>
+          'Oops, something went wrong.'
+        </Typography>
+      )}
+
+      {data && (
+        <>
+          <WatchGrid watches={data.watches} />
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 3 }}>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(data.total / pageSize)}
+              onPageChange={handlePageChange}
+            />
+          </Box>
+        </>
+      )}
+    </Container>
   );
 }
