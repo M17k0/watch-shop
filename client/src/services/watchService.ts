@@ -16,6 +16,12 @@ class WatchService {
 
     return result
   }
+
+  async loadWatch(id: number) {
+    const { result } = await httpService.get<Watch>(`/products/${id}`);
+
+    return result;
+  }
 }
 
 export const watchService = new WatchService();

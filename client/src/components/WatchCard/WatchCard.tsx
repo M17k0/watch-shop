@@ -13,21 +13,21 @@ export function WatchCard({ watch }: WatchCardProps) {
   return (
     <Card
       className={classes.watchCard}
-      onClick={() => navigate(`/watches/${watch.ID}`)}
+      onClick={() => navigate(`/watches/${watch.id}`)}
     >
       <CardMedia
         className={classes.watchImage}
         component="img"
         height="140"
-        image={watch.ImageUrl}
-        alt={watch.Name}
+        image={watch.imageUrl}
+        alt={watch.name}
       />
       <CardContent>
-        <Typography variant="h6" component="div">
-          {watch.Name}
+        <Typography variant="subtitle1" component="div">
+          {watch.name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          ${watch.Price}
+          ${watch.price}
         </Typography>
         {/* <Button size="small" onClick={(e) => { e.stopPropagation() }}>Add to Cart</Button> */}
       </CardContent>

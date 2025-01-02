@@ -10,7 +10,7 @@ export function WatchGrid({ watches }: WatchGridProps) {
   return (
     <div className={classes.grid}>
       {watches.map(watch => (
-        <WatchCard key={watch.ID} watch={watch} />
+        <WatchCard key={watch.id} watch={watch} />
       ))}
     </div>
   );

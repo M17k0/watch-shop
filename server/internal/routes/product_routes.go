@@ -15,5 +15,6 @@ func RegisterProductRoutes(router *gin.Engine, productController *controllers.Pr
 		productGroup.GET("/:id/categories", productController.GetProductCategories)
 		productGroup.PATCH("/:id", productController.UpdateProduct)
 		productGroup.DELETE("/:id", productController.DeleteProduct)
+		productGroup.POST("/:id/tags/:tagId", productController.AddTagToProduct)
 	}
 }

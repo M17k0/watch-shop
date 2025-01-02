@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 	"strconv"
+	"watch-shop-server/internal/mappers"
 	"watch-shop-server/internal/services"
 	"watch-shop-server/internal/types"
 
@@ -30,7 +31,7 @@ func (pc *ProductController) CreateProduct(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusCreated, product)
+	ctx.JSON(http.StatusCreated, mappers.MapToProductDTO(*product))
 }
 
 func (pc *ProductController) GetAllProducts(ctx *gin.Context) {
@@ -52,8 +53,13 @@ func (pc *ProductController) GetAllProducts(ctx *gin.Context) {
 		return
 	}
 
+	var productDTOs []mappers.ProductDTO
+	for _, product := range products {
+		productDTOs = append(productDTOs, mappers.MapToProductDTO(product))
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{
-		"watches": products,
+		"watches": productDTOs,
 		"total":   totalCount,
 	})
 }
@@ -71,7 +77,7 @@ func (pc *ProductController) GetProductByID(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, product)
+	ctx.JSON(http.StatusOK, mappers.MapToProductDTO(*product))
 }
 
 func (pc *ProductController) UpdateProduct(ctx *gin.Context) {
@@ -93,7 +99,7 @@ func (pc *ProductController) UpdateProduct(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(http.StatusOK, product)
+	ctx.JSON(http.StatusOK, mappers.MapToProductDTO(*product))
 }
 
 func (pc *ProductController) DeleteProduct(ctx *gin.Context) {
@@ -125,4 +131,25 @@ func (pc *ProductController) GetProductCategories(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, categories)
+}
+
+func (pc *ProductController) AddTagToProduct(ctx *gin.Context) {
+	tagId, err := strconv.Atoi(ctx.Param("tagId"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid tag ID"})
+		return
+	}
+
+	productId, err := strconv.Atoi(ctx.Param("id"))
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Invalid product ID"})
+		return
+	}
+
+	if err := pc.ProductService.AddTagToProduct(tagId, productId); err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to add tag to product"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"message": "Tag added to product successfully"})
 }
