@@ -11,6 +11,8 @@ import { MainLayout } from './MainLayout';
 import { CatalogPage } from '@/pages/CatalogPage/CatalogPage';
 import { WatchPage } from '@/pages/WatchPage/WatchPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
+import { CartProvider } from '@/contexts/CartContext';
+import { CartPage } from '@/pages/CartPage/CartPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -21,6 +23,7 @@ const router = createBrowserRouter(
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/watches" element={<CatalogPage />} />
         <Route path="/watches/:id" element={<WatchPage />} />
+        <Route path="/cart" element={<CartPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />
@@ -29,5 +32,9 @@ const router = createBrowserRouter(
 );
 
 export function App() {
-  return <RouterProvider router={router} />;
+  return ( 
+  <CartProvider>
+    <RouterProvider router={router} />;
+  </CartProvider>
+  );
 }

@@ -31,6 +31,10 @@ class WatchService {
 
     return result;
   }
+
+  async addTagToProduct(productId: number, tagId: number) {
+    await httpService.post(`/products/${productId}/tags/${tagId}`, {});
+  }
 }
 
 export const watchService = new WatchService();

@@ -10,12 +10,6 @@
   height: 400px;
 }
 
-.watchImage {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-}
-
 .watchName {
   font-size: 1.2rem;
   font-weight: bold;

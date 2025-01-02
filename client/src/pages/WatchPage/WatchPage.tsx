@@ -1,7 +1,9 @@
+import { useCart } from '@/contexts/CartContext';
 import { useAsync } from '@/hooks/useAsync';
 import { watchService } from '@/services/watchService';
 import { Box, Button, Chip, CircularProgress, Typography } from '@mui/material';
 import { useParams } from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 
 export function WatchPage() {
   const params = useParams();
@@ -15,6 +17,21 @@ export function WatchPage() {
     async () => await watchService.loadWatch(Number(watchId)),
     [watchId],
   );
+
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    if (watch) {
+      addToCart({
+        id: watch.id,
+        name: watch.name,
+        price: watch.price,
+        quantity: 1,
+        imageUrl: watch.imageUrl,
+      });
+    }
+    toast.success('Added to cart!');
+  };
 
   if (loading) {
     return (
@@ -50,6 +67,8 @@ export function WatchPage() {
   }
 
   return (
+    <>
+    <Toaster />
     <Box
       sx={{
         padding: 4,
@@ -108,16 +127,17 @@ export function WatchPage() {
           </Box>
         )}
 
-        {/* TODO: implement cart logic */}
         <Button
           variant="contained"
           color="primary"
           sx={{ marginTop: 4 }}
           disabled={watch.stock <= 0}
+          onClick={handleAddToCart}
         >
           {watch.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
         </Button>
       </Box>
     </Box>
+        </>
   );
 }
