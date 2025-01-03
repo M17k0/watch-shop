@@ -35,6 +35,7 @@ func main() {
 	tagController := controllers.NewTagController(services.NewTagService(db))
 	stripeController := controllers.NewStripeController(cfg.StripeSecretKey)
 	orderController := controllers.NewOrderController(services.NewOrderService(db))
+	userController := controllers.NewUserController(services.NewUserService(db), cfg.JWTSecret)
 
 	router := gin.Default()
 
@@ -45,6 +46,7 @@ func main() {
 	routes.RegisterTagRoutes(router, tagController)
 	routes.RegisterStripeRouter(router, stripeController)
 	routes.RegisterOrderRoutes(router, orderController)
+	routes.RegisterUserRoutes(router, userController)
 
 	fmt.Printf("Server is listening on port %s\n", cfg.ServerPort)
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.ServerPort), router); err != nil {

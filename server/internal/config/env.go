@@ -16,6 +16,7 @@ type Config struct {
 	DBPort          string
 	ServerPort      string
 	StripeSecretKey string
+	JWTSecret       string
 }
 
 func LoadConfig() (*Config, error) {
@@ -31,6 +32,7 @@ func LoadConfig() (*Config, error) {
 	dbPort := os.Getenv("DB_PORT")
 	serverPort := os.Getenv("SERVER_PORT")
 	stripeSecretKey := os.Getenv("STRIPE_SECRET_KEY")
+	jwtSecret := os.Getenv("JWT_SECRET")
 
 	if dbUser == "" || dbPassword == "" || dbHost == "" || dbName == "" || dbPort == "" || serverPort == "" || stripeSecretKey == "" {
 		return nil, fmt.Errorf("some required environment variables are missing")
@@ -44,5 +46,6 @@ func LoadConfig() (*Config, error) {
 		DBPort:          dbPort,
 		ServerPort:      serverPort,
 		StripeSecretKey: stripeSecretKey,
+		JWTSecret:       jwtSecret,
 	}, nil
 }
