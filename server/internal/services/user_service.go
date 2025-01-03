@@ -35,7 +35,6 @@ func (s *UserService) CreateUser(user *models.User) error {
 	return nil
 }
 
-// GetUserByID retrieves a user by their ID.
 func (s *UserService) GetUserByID(id uint) (*models.User, error) {
 	user := &models.User{}
 	if err := s.db.First(user, id).Error; err != nil {
@@ -44,14 +43,12 @@ func (s *UserService) GetUserByID(id uint) (*models.User, error) {
 	return user, nil
 }
 
-// AuthenticateUser checks the user's email and password for login.
 func (s *UserService) AuthenticateUser(email, password string) (*models.User, error) {
 	user := &models.User{}
 	if err := s.db.Where("email = ?", email).First(user).Error; err != nil {
 		return nil, errors.New("invalid email or password")
 	}
 
-	// Compare the provided password with the hashed password
 	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)); err != nil {
 		return nil, errors.New("invalid email or password")
 	}
