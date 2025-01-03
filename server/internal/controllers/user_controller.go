@@ -29,12 +29,30 @@ func (uc *UserController) Register(c *gin.Context) {
 		return
 	}
 
+	user.Role = models.RoleUser
+
 	if err := uc.UserService.CreateUser(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusCreated, gin.H{"message": "User registered successfully"})
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"userId": user.ID,
+		"role":   user.Role,
+		"email":  user.Email,
+		"exp":    time.Now().Add(time.Hour * 24).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(uc.JWTSecret))
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to generate token"})
+		return
+	}
+
+	c.JSON(http.StatusCreated, gin.H{
+		"message": "User registered successfully",
+		"token":   tokenString,
+	})
 }
 
 func (uc *UserController) Login(c *gin.Context) {
@@ -55,8 +73,9 @@ func (uc *UserController) Login(c *gin.Context) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userID": user.ID,
+		"userId": user.ID,
 		"role":   user.Role,
+		"email":  user.Email,
 		"exp":    time.Now().Add(time.Hour * 24).Unix(),
 	})
 

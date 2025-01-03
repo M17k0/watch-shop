@@ -6,16 +6,20 @@ import { Payment } from '../../components/Payment/Payment';
 import toast, { Toaster } from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { useAsyncAction } from '@/hooks/useAsyncAction';
+import { useCurrentUser } from '@/contexts/CurrentUserContext';
 
 export function CheckoutPage() {
+  const user = useCurrentUser();
   const navigate = useNavigate();
   const { cart, clearCart } = useCart();
   const [isPaying, setIsPaying] = useState(false);
 
+  console.log('user', user);
+
   const [formData, setFormData] = useState({
     fullName: '',
     address: '',
-    email: '',
+    email: user?.email ?? '',
     city: '',
     state: '',
     zipCode: '',
@@ -31,6 +35,7 @@ export function CheckoutPage() {
 
   const onPaymentSuccess = async () => {
     const order: Order = {
+      userId: user?.userId,
       userEmail: formData.email,
       userAddress: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.zipCode}`,
       userPhone: formData.phoneNumber,

@@ -1,7 +1,9 @@
+import { useCurrentUser } from '@/contexts/CurrentUserContext';
 import { Box, Typography, Button, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export function LandingPage() {
+  const user = useCurrentUser();
   const navigate = useNavigate();
 
   return (
@@ -34,6 +36,11 @@ export function LandingPage() {
           >
             Shop Now
           </Button>
+          { !user && (
+            <Button variant="outlined" color="primary" size="large" onClick={() => navigate('/login')}>
+              Log In
+            </Button>
+          )}
         </Box>
       </Container>
     </Box>

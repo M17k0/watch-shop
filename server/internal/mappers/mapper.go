@@ -34,6 +34,14 @@ type CategoryDTO struct {
 	Name string `json:"name"`
 }
 
+type OrderDto struct {
+	OrderNumber string `json:"orderNumber"`
+	TotalPrice  int    `json:"totalPrice"`
+	UserEmail   string `json:"userEmail"`
+	UserAddress string `json:"userAddress"`
+	UserPhone   string `json:"userPhone"`
+}
+
 func MapToProductDTO(product models.Product) ProductDTO {
 	var productTags []ProductTagDTO
 	for _, pt := range product.ProductTags {
@@ -74,5 +82,15 @@ func MapToCategoryDTO(category models.Category) CategoryDTO {
 	return CategoryDTO{
 		ID:   category.ID,
 		Name: category.Name,
+	}
+}
+
+func MapToOrderDTO(order models.Order) OrderDto {
+	return OrderDto{
+		OrderNumber: order.OrderNumber,
+		TotalPrice:  order.TotalPrice,
+		UserEmail:   order.UserEmail,
+		UserAddress: order.UserAddress,
+		UserPhone:   order.UserPhone,
 	}
 }
