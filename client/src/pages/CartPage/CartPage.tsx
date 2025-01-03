@@ -1,7 +1,14 @@
 import { useState } from 'react';
-import { Box, Typography, Button, TextField, IconButton, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Button,
+  TextField,
+  IconButton,
+  CircularProgress,
+} from '@mui/material';
 import { useCart } from '@/contexts/CartContext';
-import { MdRemoveCircle } from "react-icons/md";
+import { MdRemoveCircle } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 
 export function CartPage() {
@@ -71,7 +78,11 @@ export function CartPage() {
                   <Typography variant="body1" gutterBottom>
                     {item.name}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
                     ${item.price.toFixed(2)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -84,7 +95,9 @@ export function CartPage() {
                 <TextField
                   value={item.quantity}
                   type="number"
-                  onChange={(e) => handleChangeQuantity(item.id, Number(e.target.value))}
+                  onChange={e =>
+                    handleChangeQuantity(item.id, Number(e.target.value))
+                  }
                   size="small"
                   sx={{ width: 60, marginRight: 2 }}
                   disabled={loading}
@@ -103,10 +116,19 @@ export function CartPage() {
       )}
 
       {cart.length > 0 && (
-        <Box sx={{ marginTop: 4, display: 'flex', justifyContent: 'space-between' }}>
+        <Box
+          sx={{
+            marginTop: 4,
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}
+        >
           <Typography variant="h6">Total:</Typography>
           <Typography variant="h6" color="primary">
-            ${cart.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2)}
+            $
+            {cart
+              .reduce((total, item) => total + item.price * item.quantity, 0)
+              .toFixed(2)}
           </Typography>
         </Box>
       )}
@@ -119,7 +141,11 @@ export function CartPage() {
           disabled={cart.length === 0 || loading}
           onClick={() => navigate('/checkout')}
         >
-          {loading ? <CircularProgress size={24} color="secondary" /> : 'Proceed to Checkout'}
+          {loading ? (
+            <CircularProgress size={24} color="secondary" />
+          ) : (
+            'Proceed to Checkout'
+          )}
         </Button>
       </Box>
     </Box>
