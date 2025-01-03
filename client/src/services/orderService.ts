@@ -1,7 +1,7 @@
 import { httpService } from './httpService';
 
 export interface Order {
-  userId?: string;
+  userId?: number;
   userEmail: string;
   userAddress: string;
   userPhone: string;
@@ -13,6 +13,14 @@ export interface Order {
   }[];
 }
 
+export interface SimpleOrder {
+  orderNumber: string;
+  totalPrice: number;
+  userEmail: string;
+  userAddress: string;
+  userPhone: string;
+}
+
 class OrderService {
   async placeOrder(order: Order) {
     const { result } = await httpService.post<Order>('/orders', {
@@ -20,6 +28,12 @@ class OrderService {
     });
 
     return result;
+  }
+
+  async getOrders(userId: string) {
+      const { result } = await httpService.get<SimpleOrder[]>(`/orders/${userId}`);
+      
+      return result;
   }
 }
 

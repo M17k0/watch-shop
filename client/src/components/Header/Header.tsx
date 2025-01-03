@@ -4,8 +4,11 @@ import { Logo } from './Logo/Logo';
 import { useNavigate } from 'react-router-dom';
 import { FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '@/contexts/CartContext'; // Import the useCart hook
+import { useCurrentUser } from '@/contexts/CurrentUserContext';
+import { authService } from '@/services/authService';
 
 export function Header() {
+  const user = useCurrentUser();
   const navigate = useNavigate();
   const { cart } = useCart();
   const totalItemsInCart = cart.reduce((acc, item) => acc + item.quantity, 0);
@@ -35,6 +38,35 @@ export function Header() {
             <div className={classes.cartBadge}>{totalItemsInCart}</div>
           )}
         </Button>
+        { user &&
+          (
+          <><Button
+            variant="primary"
+            color="primary"
+            className={classes.navButton}
+            onClick={() => navigate('/orders')}
+          >
+            My orders
+          </Button>
+          <Button
+            variant="primary"
+            color="primary"
+            className={classes.navButton}
+            onClick={() => authService.logout()}
+            >
+              Log out
+            </Button></>)
+        }
+        { !user && (
+          <Button
+            variant="primary"
+            color="primary"
+            className={classes.navButton}
+            onClick={() => navigate('/login')}
+          >
+            Login
+          </Button>
+        )}
       </nav>
     </header>
   );

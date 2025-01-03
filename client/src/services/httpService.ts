@@ -5,8 +5,8 @@ import { HTTPError } from '../errors/HTTPError';
 import { FieldError } from '../errors/FieldError';
 import { NotFoundError } from '../errors/NotFoundError';
 import { ServerError } from '../errors/ServerError';
-// import { authService } from './auth';
-// import { userInfoService } from './userInfo';
+// import { authService } from './authService';
+// import { userInfoService } from './UserInfoService';
 import { NotUniqueError } from '../errors/NotUniqueError';
 
 type Method = 'GET' | 'POST' | 'DELETE' | 'PUT';

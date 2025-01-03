@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"strconv"
+	"watch-shop-server/internal/mappers"
 	"watch-shop-server/internal/models"
 	"watch-shop-server/internal/services"
 
@@ -74,7 +75,7 @@ func (oc *OrderController) CreateOrder(ctx *gin.Context) {
 }
 
 func (oc *OrderController) GetOrdersByUser(ctx *gin.Context) {
-	userID := ctx.Param("userID")
+	userID := ctx.Param("userId")
 	userIdNum, err := strconv.Atoi(userID)
 	if err != nil {
 		ctx.JSON(400, gin.H{"error": "Invalid user ID"})
@@ -87,5 +88,10 @@ func (oc *OrderController) GetOrdersByUser(ctx *gin.Context) {
 		return
 	}
 
-	ctx.JSON(200, orders)
+	var orderDTOs []mappers.OrderDto
+	for _, order := range orders {
+		orderDTOs = append(orderDTOs, mappers.MapToOrderDTO(order))
+	}
+
+	ctx.JSON(200, orderDTOs)
 }
