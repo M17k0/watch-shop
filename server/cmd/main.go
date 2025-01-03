@@ -33,6 +33,8 @@ func main() {
 	productController := controllers.NewProductController(services.NewProductService(db))
 	categoryController := controllers.NewCategoryController(services.NewCategoryService(db))
 	tagController := controllers.NewTagController(services.NewTagService(db))
+	stripeController := controllers.NewStripeController(cfg.StripeSecretKey)
+	orderController := controllers.NewOrderController(services.NewOrderService(db))
 
 	router := gin.Default()
 
@@ -41,6 +43,8 @@ func main() {
 	routes.RegisterProductRoutes(router, productController)
 	routes.RegisterCategoryRoutes(router, categoryController)
 	routes.RegisterTagRoutes(router, tagController)
+	routes.RegisterStripeRouter(router, stripeController)
+	routes.RegisterOrderRoutes(router, orderController)
 
 	fmt.Printf("Server is listening on port %s\n", cfg.ServerPort)
 	if err := http.ListenAndServe(fmt.Sprintf(":%s", cfg.ServerPort), router); err != nil {

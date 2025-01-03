@@ -9,12 +9,13 @@ import (
 )
 
 type Config struct {
-	DBUser     string
-	DBPassword string
-	DBHost     string
-	DBName     string
-	DBPort     string
-	ServerPort string
+	DBUser          string
+	DBPassword      string
+	DBHost          string
+	DBName          string
+	DBPort          string
+	ServerPort      string
+	StripeSecretKey string
 }
 
 func LoadConfig() (*Config, error) {
@@ -29,17 +30,19 @@ func LoadConfig() (*Config, error) {
 	dbName := os.Getenv("DB_NAME")
 	dbPort := os.Getenv("DB_PORT")
 	serverPort := os.Getenv("SERVER_PORT")
+	stripeSecretKey := os.Getenv("STRIPE_SECRET_KEY")
 
-	if dbUser == "" || dbPassword == "" || dbHost == "" || dbName == "" || dbPort == "" || serverPort == "" {
+	if dbUser == "" || dbPassword == "" || dbHost == "" || dbName == "" || dbPort == "" || serverPort == "" || stripeSecretKey == "" {
 		return nil, fmt.Errorf("some required environment variables are missing")
 	}
 
 	return &Config{
-		DBUser:     dbUser,
-		DBPassword: dbPassword,
-		DBHost:     dbHost,
-		DBName:     dbName,
-		DBPort:     dbPort,
-		ServerPort: serverPort,
+		DBUser:          dbUser,
+		DBPassword:      dbPassword,
+		DBHost:          dbHost,
+		DBName:          dbName,
+		DBPort:          dbPort,
+		ServerPort:      serverPort,
+		StripeSecretKey: stripeSecretKey,
 	}, nil
 }

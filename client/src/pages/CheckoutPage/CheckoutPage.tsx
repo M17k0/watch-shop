@@ -1,22 +1,75 @@
-import { Box, Typography, Button, TextField } from '@mui/material';
 import { useCart } from '@/contexts/CartContext';
+import { Order, orderService } from '@/services/orderService';
+import { Box, Button, TextField, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Payment } from '../../components/Payment/Payment';
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+import { useAsyncAction } from '@/hooks/useAsyncAction';
 
 export function CheckoutPage() {
-  const { cart } = useCart();
+  const navigate = useNavigate();
+  const { cart, clearCart } = useCart();
+  const [isPaying, setIsPaying] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    // TODO: handle form submission
+  const [formData, setFormData] = useState({
+    fullName: '',
+    address: '',
+    email: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    phoneNumber: '',
+  });
+
+  const { perform } = useAsyncAction(orderService.placeOrder);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const onPaymentSuccess = async () => {
+    const order: Order = {
+      userEmail: formData.email,
+      userAddress: `${formData.address}, ${formData.city}, ${formData.state}, ${formData.zipCode}`,
+      userPhone: formData.phoneNumber,
+      items: cart.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        quantity: item.quantity,
+      })),
+    };
+
+    try {
+      await perform(order);
+      clearCart();
+      toast.success('Order placed successfully');
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+    } catch (error) {
+      toast.error('Error placing order. Please try again later.');
+      setTimeout(() => {
+        navigate('/');
+      }, 1500);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Order placed successfully!');
+    setIsPaying(true);
+    // onPaymentSuccess();
   };
 
   return (
+    <>
+    < Toaster />
     <Box sx={{ padding: 4 }}>
       <Typography variant="h4" gutterBottom>
         Checkout
       </Typography>
-
-      {/* Cart Summary */}
       <Box sx={{ marginBottom: 4 }}>
         <Typography variant="h6" gutterBottom>
           Order Summary
@@ -28,7 +81,7 @@ export function CheckoutPage() {
           </Typography>
         ) : (
           <Box>
-            {cart.map(item => (
+            {cart.map((item) => (
               <Box
                 key={item.id}
                 sx={{
@@ -84,31 +137,106 @@ export function CheckoutPage() {
         )}
       </Box>
 
-      {/* Checkout Form */}
+      { !isPaying &&
       <Box component="form" onSubmit={handleSubmit} sx={{ marginTop: 4 }}>
         <Typography variant="h6" gutterBottom>
           Shipping Details
         </Typography>
-
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField label="Full Name" variant="outlined" required fullWidth />
-          <TextField label="Address" variant="outlined" required fullWidth />
-          <TextField label="City" variant="outlined" required fullWidth />
-          <TextField label="State" variant="outlined" required fullWidth />
-          <TextField label="Zip Code" variant="outlined" required fullWidth />
-          <TextField label="Phone Number" variant="outlined" required fullWidth />
-        </Box>
-
-        <Button
-          type="submit"
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <TextField
+                  label="Full Name"
+                  name="fullName"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={formData.fullName}
+                  onChange={handleChange}
+                />
+                <TextField
+                  label="Email Address"
+                  name="email"
+                  type="email"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={formData.email}
+                  onChange={handleChange}
+                />
+                <TextField
+                  label="Address"
+                  name="address"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={formData.address}
+                  onChange={handleChange}
+                />
+                <TextField
+                  label="City"
+                  name="city"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+                <TextField
+                  label="State"
+                  name="state"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={formData.state}
+                  onChange={handleChange}
+                />
+                <TextField
+                  label="Zip Code"
+                  name="zipCode"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={formData.zipCode}
+                  onChange={handleChange}
+                />
+                <TextField
+                  label="Phone Number"
+                  name="phoneNumber"
+                  type="tel"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                />
+              </Box>
+              { !isPaying &&
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  sx={{ marginTop: 4 }}
+                  fullWidth
+                >
+                  Continue to Payment
+                </Button>
+              }
+            </Box>
+          }
+    { isPaying &&
+      (
+        (<Button
+          type="button"
           variant="contained"
           color="primary"
           sx={{ marginTop: 4 }}
           fullWidth
+          onClick={() => setIsPaying(false)}
         >
-          Place Order
-        </Button>
-      </Box>
+          Back to Shipping Details
+        </Button>)
+      )}
+      {isPaying && <Payment onPaymentSuccess={onPaymentSuccess}/>}
     </Box>
+    </>
   );
 }
