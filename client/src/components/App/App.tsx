@@ -13,6 +13,7 @@ import { WatchPage } from '@/pages/WatchPage/WatchPage';
 import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { CartProvider } from '@/contexts/CartContext';
 import { CartPage } from '@/pages/CartPage/CartPage';
+import { CheckoutPage } from '@/pages/CheckoutPage/CheckoutPage';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
         <Route path="/watches" element={<CatalogPage />} />
         <Route path="/watches/:id" element={<WatchPage />} />
         <Route path="/cart" element={<CartPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

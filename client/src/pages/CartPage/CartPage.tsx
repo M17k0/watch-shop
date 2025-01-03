@@ -1,14 +1,18 @@
 import { useState } from 'react';
-import { Box, Typography, Button, TextField, IconButton, Grid, Divider, CircularProgress } from '@mui/material';
+import { Box, Typography, Button, TextField, IconButton, CircularProgress } from '@mui/material';
 import { useCart } from '@/contexts/CartContext';
 import { MdRemoveCircle } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 export function CartPage() {
-  const { cart, updateQuantity, removeFromCart } = useCart(); // Getting cart items and actions from context
+  const { cart, updateQuantity, removeFromCart } = useCart();
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChangeQuantity = (id: number, quantity: number) => {
-    if (quantity < 1) return; // Prevent decreasing quantity to less than 1
+    if (quantity < 1 || quantity > 9) {
+      return;
+    }
     setLoading(true);
     updateQuantity(id, quantity);
     setLoading(false);
@@ -31,72 +35,71 @@ export function CartPage() {
           Your cart is empty.
         </Typography>
       ) : (
-        <Grid container spacing={3}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3,
+          }}
+        >
           {cart.map(item => (
-            <Grid item xs={12} sm={6} md={4} key={item.id}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: 2,
-                  border: '1px solid #ddd',
-                  borderRadius: '8px',
-                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <img
-                    src={item.imageUrl}
-                    alt={item.name}
-                    style={{
-                      width: 100,
-                      height: 100,
-                      objectFit: 'cover',
-                      borderRadius: '8px',
-                      marginRight: '16px',
-                    }}
-                  />
-                  <Box>
-                    <Typography variant="body1" gutterBottom>
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" gutterBottom>
-                      ${item.price.toFixed(2)}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Total: ${(item.price * item.quantity).toFixed(2)}
-                    </Typography>
-                  </Box>
-                </Box>
-
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  {/* Quantity input */}
-                  <TextField
-                    value={item.quantity}
-                    type="number"
-                    onChange={(e) => handleChangeQuantity(item.id, Number(e.target.value))}
-                    size="small"
-                    sx={{ width: 60, marginRight: 2 }}
-                    InputProps={{
-                      inputProps: { min: 1 },
-                    }}
-                    disabled={loading}
-                  />
-                  {/* Remove Button */}
-                  <IconButton
-                    color="error"
-                    onClick={() => handleRemove(item.id)}
-                    disabled={loading}
-                  >
-                    <MdRemoveCircle />
-                  </IconButton>
+            <Box
+              key={item.id}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: 2,
+                border: '1px solid #ddd',
+                borderRadius: '8px',
+                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <img
+                  src={item.imageUrl}
+                  alt={item.name}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                    marginRight: '16px',
+                  }}
+                />
+                <Box>
+                  <Typography variant="body1" gutterBottom>
+                    {item.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    ${item.price.toFixed(2)}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Total: ${(item.price * item.quantity).toFixed(2)}
+                  </Typography>
                 </Box>
               </Box>
-              <Divider sx={{ margin: '16px 0' }} />
-            </Grid>
+
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <TextField
+                  value={item.quantity}
+                  type="number"
+                  onChange={(e) => handleChangeQuantity(item.id, Number(e.target.value))}
+                  size="small"
+                  sx={{ width: 60, marginRight: 2 }}
+                  disabled={loading}
+                />
+                <IconButton
+                  color="error"
+                  onClick={() => handleRemove(item.id)}
+                  disabled={loading}
+                >
+                  <MdRemoveCircle />
+                </IconButton>
+              </Box>
+            </Box>
           ))}
-        </Grid>
+        </Box>
       )}
 
       {cart.length > 0 && (
@@ -114,6 +117,7 @@ export function CartPage() {
           color="primary"
           fullWidth
           disabled={cart.length === 0 || loading}
+          onClick={() => navigate('/checkout')}
         >
           {loading ? <CircularProgress size={24} color="secondary" /> : 'Proceed to Checkout'}
         </Button>
