@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"strconv"
 	"watch-shop-server/internal/models"
 	"watch-shop-server/internal/services"
 
@@ -70,4 +71,21 @@ func (oc *OrderController) CreateOrder(ctx *gin.Context) {
 	}
 
 	ctx.JSON(201, createdOrder)
+}
+
+func (oc *OrderController) GetOrdersByUser(ctx *gin.Context) {
+	userID := ctx.Param("userID")
+	userIdNum, err := strconv.Atoi(userID)
+	if err != nil {
+		ctx.JSON(400, gin.H{"error": "Invalid user ID"})
+		return
+	}
+
+	orders, err := oc.OrderService.GetOrdersByUserId(userIdNum)
+	if err != nil {
+		ctx.JSON(500, gin.H{"error": "Failed to fetch orders", "details": err.Error()})
+		return
+	}
+
+	ctx.JSON(200, orders)
 }

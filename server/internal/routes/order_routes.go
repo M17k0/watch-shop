@@ -10,5 +10,6 @@ func RegisterOrderRoutes(router *gin.Engine, orderController *controllers.OrderC
 	orderGroup := router.Group("/orders")
 	{
 		orderGroup.POST("", orderController.CreateOrder)
+		orderGroup.GET("/:userId", orderController.GetOrdersByUser)
 	}
 }

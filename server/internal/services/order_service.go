@@ -79,3 +79,12 @@ func (s *OrderService) GetProductPrice(productID int) (float64, error) {
 
 	return product.Price, nil
 }
+
+func (s *OrderService) GetOrdersByUserId(userID int) ([]models.Order, error) {
+	var orders []models.Order
+	if err := s.db.Where("user_id = ?", userID).Find(&orders).Error; err != nil {
+		return nil, fmt.Errorf("failed to fetch orders: %w", err)
+	}
+
+	return orders, nil
+}
