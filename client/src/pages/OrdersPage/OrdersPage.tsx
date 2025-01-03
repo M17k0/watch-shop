@@ -54,13 +54,13 @@ export function OrdersPage() {
         </Typography>
       )}
 
-      {!loading && !error && orders.length === 0 && (
+      {!loading && !error && !orders?.length && (
         <Typography variant="body1" sx={{ marginTop: 2 }}>
           No orders found.
         </Typography>
       )}
 
-      {!loading && !error && orders.length > 0 && (
+      {!loading && !error && orders?.length > 0 && (
         <Paper elevation={3} sx={{ marginTop: 2 }}>
           <Table sx={{ minWidth: 650 }}>
             <TableHead>
