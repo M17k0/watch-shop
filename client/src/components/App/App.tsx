@@ -34,9 +34,9 @@ const router = createBrowserRouter(
 );
 
 export function App() {
-  return ( 
-  <CartProvider>
-    <RouterProvider router={router} />;
-  </CartProvider>
+  return (
+    <CartProvider>
+      <RouterProvider router={router} />;
+    </CartProvider>
   );
 }

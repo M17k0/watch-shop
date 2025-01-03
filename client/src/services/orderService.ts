@@ -1,4 +1,4 @@
-import { httpService } from "./httpService";
+import { httpService } from './httpService';
 
 export interface Order {
   userId?: string;
@@ -15,7 +15,9 @@ export interface Order {
 
 class OrderService {
   async placeOrder(order: Order) {
-    const { result } = await httpService.post<Order>('/orders', {body: order});
+    const { result } = await httpService.post<Order>('/orders', {
+      body: order,
+    });
 
     return result;
   }

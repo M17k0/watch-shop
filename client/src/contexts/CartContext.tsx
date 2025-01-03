@@ -1,4 +1,10 @@
-import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
+import {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from 'react';
 
 interface CartItem {
   id: number;
@@ -32,12 +38,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = (item: CartItem) => {
     setCart(prevCart => {
-      const existingProduct = prevCart.find((product) => product.id === item.id);
+      const existingProduct = prevCart.find(product => product.id === item.id);
       if (existingProduct) {
-        return prevCart.map((product) =>
+        return prevCart.map(product =>
           product.id === item.id
             ? { ...product, quantity: product.quantity + 1 }
-            : product
+            : product,
         );
       } else {
         return [...prevCart, { ...item, quantity: 1 }];
@@ -52,8 +58,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const updateQuantity = (id: number, quantity: number) => {
     setCart(prevCart =>
       prevCart.map(item =>
-        item.id === id ? { ...item, quantity: Math.max(quantity, 1) } : item
-      )
+        item.id === id ? { ...item, quantity: Math.max(quantity, 1) } : item,
+      ),
     );
   };
 
@@ -63,11 +69,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}>
+    <CartContext.Provider
+      value={{ cart, addToCart, removeFromCart, updateQuantity, clearCart }}
+    >
       {children}
     </CartContext.Provider>
   );
-};
+}
 
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);

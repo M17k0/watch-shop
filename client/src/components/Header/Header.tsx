@@ -2,7 +2,7 @@ import { Button } from '@/components/Button/Button';
 import classes from './Header.module.css';
 import { Logo } from './Logo/Logo';
 import { useNavigate } from 'react-router-dom';
-import { FaShoppingCart } from "react-icons/fa";
+import { FaShoppingCart } from 'react-icons/fa';
 import { useCart } from '@/contexts/CartContext'; // Import the useCart hook
 
 export function Header() {
