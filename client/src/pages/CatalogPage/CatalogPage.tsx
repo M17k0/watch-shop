@@ -17,7 +17,7 @@ import { TagFilter } from '@/components/TagFilter/TagFilter';
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
-  const pageSize = 10;
+  const pageSize = 8;
 
   const searchQuery = searchParams.get('query') ?? '';
   const pageParam = parseInt(searchParams.get('page') ?? '1', 10);
