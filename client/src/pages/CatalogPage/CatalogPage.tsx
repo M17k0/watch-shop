@@ -11,6 +11,7 @@ import {
   Typography,
   Container,
   CircularProgress,
+  MenuItem,
 } from '@mui/material';
 import { TagFilter } from '@/components/TagFilter/TagFilter';
 
@@ -129,9 +130,9 @@ export function CatalogPage() {
             size="small"
             sx={{ minWidth: 120 }}
           >
-            <option value="name">Name</option>
-            <option value="price">Price</option>
-            <option value="created_at">Newest</option>
+            <MenuItem value="name">Name</MenuItem>
+            <MenuItem value="price">Price</MenuItem>
+            <MenuItem value="created_at">Newest</MenuItem>
           </TextField>
           <TextField
             select
@@ -141,8 +142,8 @@ export function CatalogPage() {
             size="small"
             sx={{ minWidth: 120 }}
           >
-            <option value="asc">Ascending</option>
-            <option value="desc">Descending</option>
+            <MenuItem value="asc">Ascending</MenuItem>
+            <MenuItem value="desc">Descending</MenuItem>
           </TextField>
         </Box>
       </Box>
