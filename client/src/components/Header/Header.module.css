@@ -41,3 +41,32 @@
   font-size: 12px;
   font-weight: bold;
 }
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+  }
+
+  .logo {
+    margin-bottom: 10px;
+  }
+
+  .navButton {
+    font-size: 14px;
+    padding: 5px 10px;
+  }
+
+  .cartBadge {
+    width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+}
