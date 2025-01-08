@@ -23,9 +23,23 @@ func (s *ProductService) GetProductByID(id uint) (*models.Product, error) {
 	return product, nil
 }
 
-func (s *ProductService) GetAllProductsPaginated(page, pageSize int, searchQuery string, tags []int) ([]models.Product, int64, error) {
+func (s *ProductService) GetAllProductsPaginated(page, pageSize int, searchQuery string, tags []int, orderBy, order string) ([]models.Product, int64, error) {
 	var products []models.Product
 	var totalCount int64
+
+	if order != "asc" && order != "desc" {
+		order = "asc"
+	}
+
+	allowedOrderByColumns := map[string]bool{
+		"name":       true,
+		"price":      true,
+		"created_at": true,
+		"updated_at": true,
+	}
+	if !allowedOrderByColumns[orderBy] {
+		orderBy = "name"
+	}
 
 	query := s.db.Model(&models.Product{})
 	if searchQuery != "" {
@@ -42,6 +56,8 @@ func (s *ProductService) GetAllProductsPaginated(page, pageSize int, searchQuery
 	if err := countQuery.Count(&totalCount).Error; err != nil {
 		return nil, 0, err
 	}
+
+	query = query.Order(orderBy + " " + order)
 
 	offset := (page - 1) * pageSize
 	if err := query.Preload("ProductTags.Tag.Category").

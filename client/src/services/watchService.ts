@@ -12,14 +12,17 @@ class WatchService {
     page = 1,
     pageSize = 10,
     tags: number[] = [],
+    orderBy = 'name',
+    order = 'asc',
   ) {
-    console.log(tags);
     const { result } = await httpService.get<LoadWatchesResponse>('/products', {
       query: {
         page,
         pageSize,
         query,
         tags: tags.join('-'),
+        orderBy,
+        order,
       },
     });
 

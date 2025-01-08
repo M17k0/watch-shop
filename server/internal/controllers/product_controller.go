@@ -62,7 +62,10 @@ func (pc *ProductController) GetAllProducts(ctx *gin.Context) {
 		}
 	}
 
-	products, totalCount, err := pc.ProductService.GetAllProductsPaginated(page, pageSize, searchQuery, tags)
+	orderBy := ctx.DefaultQuery("orderBy", "name")
+	order := ctx.DefaultQuery("order", "asc")
+
+	products, totalCount, err := pc.ProductService.GetAllProductsPaginated(page, pageSize, searchQuery, tags, orderBy, order)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to retrieve products"})
 		return

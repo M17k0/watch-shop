@@ -17,6 +17,8 @@ import { TagFilter } from '@/components/TagFilter/TagFilter';
 export function CatalogPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchTerm, setSearchTerm] = useState('');
+  const [orderBy, setOrderBy] = useState('name');
+  const [order, setOrder] = useState('asc');
   const pageSize = 8;
 
   const searchQuery = searchParams.get('query') ?? '';
@@ -67,8 +69,10 @@ export function CatalogPage() {
         currentPage,
         pageSize,
         selectedTags,
+        orderBy,
+        order,
       ),
-    [searchParams, currentPage, selectedTags],
+    [searchParams, currentPage, selectedTags, order, orderBy],
   );
 
   return (
@@ -113,7 +117,35 @@ export function CatalogPage() {
         </Typography>
       )}
 
-      <TagFilter onFilterApply={handleFilterApply} />
+      <Box sx={{ mb: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <TagFilter onFilterApply={handleFilterApply} />
+
+        <Box sx={{ display: 'flex', gap: 2 }}>
+          <TextField
+            select
+            label="Sort By"
+            value={orderBy}
+            onChange={(e) => setOrderBy(e.target.value)}
+            size="small"
+            sx={{ minWidth: 120 }}
+          >
+            <option value="name">Name</option>
+            <option value="price">Price</option>
+            <option value="created_at">Newest</option>
+          </TextField>
+          <TextField
+            select
+            label="Order"
+            value={order}
+            onChange={(e) => setOrder(e.target.value)}
+            size="small"
+            sx={{ minWidth: 120 }}
+          >
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </TextField>
+        </Box>
+      </Box>
 
       {data && (
         <>
